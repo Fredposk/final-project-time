@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const CreationPage = (props) => {
     // Back button will take coordinates to center back to MAP.js
@@ -7,8 +8,8 @@ const CreationPage = (props) => {
 
     const createNewBoard = async () => {
         const response = await axios.post('/api/add/board', {
-            lat: props.match.location.state.lat,
-            lng: props.match.location.state.lng,
+            lat: props.history.location.state.lat,
+            lng: props.history.location.state.lng,
             name: InputName,
         });
 
@@ -29,6 +30,17 @@ const CreationPage = (props) => {
                 placeholder='Name for board'
             />
             <button onClick={createNewBoard}>GO!</button>
+            <Link
+                to={{
+                    pathname: '/maps',
+                    state: {
+                        lat: props.history.location.state.lat,
+                        lng: props.history.location.state.lng,
+                    },
+                }}
+            >
+                CLICK TO GO BACK
+            </Link>
         </div>
     );
 };

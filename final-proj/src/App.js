@@ -6,6 +6,7 @@ import Map from './components/Map';
 import Home from './components/Home';
 import CreationPage from './components/CreationPage';
 import Board from './components/Board';
+import Thread from './components/Thread';
 
 function App() {
     return (
@@ -26,7 +27,17 @@ function App() {
                     exact
                     path='/add/board'
                     render={(props) => (
-                        <CreationPage history={props.history} match={props} />
+                        <CreationPage
+                            history={props.history}
+                            match={props.match}
+                        />
+                    )}
+                />
+                <Route
+                    exact
+                    path='/thread/:id'
+                    render={(props) => (
+                        <Thread history={props.history} match={props.match} />
                     )}
                 />
             </BrowserRouter>

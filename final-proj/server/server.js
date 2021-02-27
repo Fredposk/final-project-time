@@ -4,17 +4,9 @@ const helmet = require('helmet');
 const cookieSession = require('cookie-session');
 const compression = require('compression');
 const db = require('./db');
-
+const randomColor = require('randomcolor');
 const app = express();
-// Socket.io
-const server = require('http').createServer(app);
-const io = require('socket.io')(server, {
-    cors: {
-        origin: 'http://localhost:3000',
-        methods: ['GET', 'POST'],
-    },
-});
-const { v3: uuidv3 } = require('uuid');
+const cryptoRandomString = require('crypto-random-string');
 //
 app.use(compression());
 // Logging middleware
@@ -37,24 +29,28 @@ app.use(express.urlencoded({ extended: false }));
 // json handling
 app.use(express.json());
 // cookie handlers
-const cookieSessionMiddleware = cookieSession({
-    name: 'session',
-    keys: [secrets],
-    // Cookie Options 24hrs
-    maxAge: 24 * 60 * 60 * 1000,
-});
-app.use(cookieSessionMiddleware);
-io.use(function (socket, next) {
-    cookieSessionMiddleware(socket.request, socket.request.res, next);
-});
+app.use(
+    cookieSession({
+        name: 'session',
+        keys: [secrets],
+        // Cookie Options 24hrs
+        maxAge: 24 * 60 * 60 * 1000,
+    })
+);
+// app.use(cookieSessionMiddleware);
+// io.use(function (socket, next) {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
 
-app.post('/api/locationclicked', (req, res) => {
-    const { lat, lng, time } = req.body;
-    console.log(lat, lng, time);
-    const login = uuidv3('Frederico', uuidv3.URL);
-    console.log(login);
-    res.send({ express: 'Hello From Express' });
-});
+// app.post('/api/locationclicked', (req, res) => {
+//     const { lat, lng, time } = req.body;
+//     console.log(lat, lng, time);
+//     const login = uuidv3('Frederico', uuidv3.URL);
+//     console.log(login);
+//     res.send({ express: 'Hello From Express' });
+// });
+// const path = require('path');
+// app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/api/markers/', async (req, res) => {
     try {
@@ -77,15 +73,72 @@ app.post('/api/add/board', async (req, res) => {
     }
 });
 
-// This will fetch the threads inside a board
 app.get('/api/board/:board_id', async (req, res) => {
-    console.log(req.params.board_id);
-
-    res.status(200).json({ response: 'hello' });
+    try {
+        const threads = await db.getThreads(req.params.board_id);
+        const boardInfo = await db.getBoardInfo(req.params.board_id);
+        res.status(200).json({
+            response: threads.rows,
+            boardInfo: boardInfo.rows,
+        });
+    } catch (error) {
+        console.log('error getting threads', error);
+        res.status(404);
+    }
 });
 // Below will be the thread creation
+app.post('/api/add/thread', async (req, res) => {
+    const { fpbp, room_id, topic, threadPic } = req.body;
+
+    var color = randomColor();
+    try {
+        const thread = await db.createThread(
+            threadPic,
+            color,
+            topic,
+            fpbp,
+            room_id
+        );
+        console.log(thread.rows);
+        res.status(200).json({ thread: thread.rows });
+    } catch (error) {
+        console.log(error, 'error posting new thread');
+        res.status(201).json({ error });
+    }
+});
+
+app.get('/api/comments/:id', async (req, res) => {
+    try {
+        const comment = await db.getComment(req.params.id);
+        res.status(200).json({ comments: comment.rows });
+    } catch (error) {
+        console.log(error, 'error getting comments');
+        res.status(201).json({ error });
+    }
+});
+
+app.post('/api/comments/add/', async (req, res) => {
+    const { comment, threadid, image } = req.body;
+    try {
+        !req.session.UserID
+            ? (req.session.userID = cryptoRandomString({
+                  length: 11,
+                  type: 'distinguishable',
+              }))
+            : req.session.userID;
+        const createComment = await db.addComment(
+            req.session.userID,
+            comment,
+            threadid
+        );
+        console.log(createComment.rows);
+    } catch (error) {
+        console.log(error, 'error inside comment');
+        res.status(201).json({ error: error });
+    }
+});
 
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, function () {
+app.listen(PORT, function () {
     console.log(`I'm listening on ${PORT}`);
 });

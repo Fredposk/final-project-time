@@ -4,7 +4,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import MapStyles from './MapStyles';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import {
     GoogleMap,
     useLoadScript,
@@ -33,21 +33,24 @@ const options = {
     styles: MapStyles,
     disableDefaultUI: true,
 };
-const center = {
-    lat: 52.523225,
-    lng: 13.383186,
-};
 
 export default withRouter(Map);
 
 function Map(props) {
+    const [selected, setSelected] = useState();
+
+    const lng = props?.location?.state?.lng;
+    const lat = props?.location?.state?.lat;
+
+    const center = {
+        lat: lat || 52.523225,
+        lng: lng || 13.383186,
+    };
+
     const fetchMarkers = () => {
         return axios.get(`/api/markers/`);
     };
-
-    const [selected, setSelected] = useState();
-
-    const { data, status } = useQuery('markers', fetchMarkers);
+    const { data, status } = useQuery(['markers'], fetchMarkers);
     // console.log(data?.data?.response);
     console.log(status);
 
@@ -69,26 +72,6 @@ function Map(props) {
                     {
                         label: 'Yes',
                         onClick: () => {
-                            // setMarkers((current) => [
-                            //     ...current,
-                            //     {
-                            //         lat: e.latLng.lat(),
-                            //         lng: e.latLng.lng(),
-                            //         time: new Date(),
-                            //     },
-                            // ]);
-                            // async function server() {
-                            //     const data = await axios.post(
-                            //         '/api/locationclicked',
-                            //         {
-                            //             lat: e.latLng.lat(),
-                            //             lng: e.latLng.lng(),
-                            //             // time: new Date(),
-                            //         }
-                            //     );
-                            //     console.log(data);
-                            // }
-                            // server();
                             props.history.push({
                                 pathname: '/add/board',
                                 state: {
@@ -125,7 +108,7 @@ function Map(props) {
             <div className='inline-flex p-4 mt-4 bg-red-400'>
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
-                    zoom={12}
+                    zoom={15}
                     center={center}
                     options={options}
                     onClick={onMapClick}
@@ -162,13 +145,9 @@ function Map(props) {
                             }}
                         >
                             <div>
-                                <button
-                                    onClick={() => {
-                                        console.log('clicked inside modal');
-                                    }}
-                                >
+                                <Link to={`/board/${selected.room_id}`}>
                                     click to see more
-                                </button>
+                                </Link>
                             </div>
                         </InfoWindow>
                     ) : null}
@@ -195,7 +174,7 @@ function Map(props) {
                 }}
             >
                 {' '}
-                CLICK
+                CLICK FOR YOUR LOCATION
                 {/* <img src='/compass.svg' alt='compass' /> */}
             </button>
         );
@@ -210,7 +189,10 @@ function Map(props) {
             clearSuggestions,
         } = usePlacesAutocomplete({
             requestOptions: {
-                location: { lat: () => 52.523225, lng: () => 13.383186 },
+                location: {
+                    lat: () => lat || 52.523225,
+                    lng: () => lng || 13.383186,
+                },
                 radius: 250,
             },
         });
