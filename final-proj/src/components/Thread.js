@@ -32,7 +32,7 @@ const Thread = (props) => {
                 CLICK to MAP
             </Link>
             <Link to={`/board/${props.history.location.state.room_id}`}>
-                click to go back to the boards
+                click to go back to the board
             </Link>
 
             <input
@@ -53,6 +53,15 @@ const Thread = (props) => {
             >
                 Click to post new comment
             </button>
+            {status === 'success' &&
+                data.data.comments.map((comment) => (
+                    <div
+                        style={{ backgroundColor: `${comment.color}` }}
+                        key={comment.comment_id}
+                    >
+                        {comment.comment}
+                    </div>
+                ))}
         </div>
     );
 };

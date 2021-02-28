@@ -76,7 +76,10 @@ const Board = (props) => {
 
             {status === 'success' &&
                 data.data.response.map((thread) => (
-                    <div key={thread.thread_id}>
+                    <div
+                        style={{ backgroundColor: `${thread.color}` }}
+                        key={thread.thread_id}
+                    >
                         {thread.topic}
 
                         <Link
@@ -89,7 +92,7 @@ const Board = (props) => {
                                 },
                             }}
                         >
-                            click
+                            click to see comments
                         </Link>
                     </div>
                 ))}

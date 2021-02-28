@@ -26,7 +26,7 @@ import '@reach/combobox/styles.css';
 
 const libraries = ['places'];
 const mapContainerStyle = {
-    width: '80vw',
+    width: '100vw',
     height: '80vh',
 };
 const options = {
@@ -121,7 +121,7 @@ function Map(props) {
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 icon={{
                                     url:
-                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/00/Chat_icon.svg/1218px-Chat_icon.svg.png',
+                                        'https://www.pinclipart.com/picdir/middle/491-4917893_chat-icon-svg-png-icon-free-download-chat.png',
                                     scaledSize: new window.google.maps.Size(
                                         30,
                                         30

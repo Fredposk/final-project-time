@@ -76,6 +76,7 @@ app.get('/api/board/:board_id', async (req, res) => {
 app.post('/api/add/thread', async (req, res) => {
     const { fpbp, room_id, topic, threadPic } = req.body;
     let author_id;
+    let commentColor;
     if (!req.session.userID) {
         req.session.userID = cryptoRandomString({
             length: 11,
@@ -86,19 +87,21 @@ app.post('/api/add/thread', async (req, res) => {
         await db.colorToUser(author_id, userColor);
     } else {
         author_id = req.session.userID;
+        commentColor = await db.getUserColor(author_id);
+        // console.log(commentColor.rows[0].color);
+        commentColor = commentColor.rows[0].color;
     }
-    var color = randomColor();
     try {
         const thread = await db.createThread(
             threadPic,
-            color,
+            commentColor,
             topic,
             fpbp,
             room_id,
             author_id
         );
-        const authorColor = db.getUserColor(thread.rows[0].author_id);
-        res.status(200).json({ thread: thread.rows, authorColor: authorColor });
+
+        res.status(200).json({ thread: thread.rows });
     } catch (error) {
         console.log(error, 'error posting new thread');
         res.status(201).json({ error });
