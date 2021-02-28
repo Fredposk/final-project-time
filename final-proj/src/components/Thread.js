@@ -41,14 +41,13 @@ const Thread = (props) => {
                 type='text'
                 placeholder='Comment..'
             ></input>
-
             <button
                 className='bg-blue-300'
                 onClick={() => {
                     mutation.mutate({
                         comment: writeComment,
                         // image: 'image',
-                        threadid: props.match.params.id,
+                        thread_id: props.match.params.id,
                     });
                 }}
             >

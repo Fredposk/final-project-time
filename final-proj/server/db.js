@@ -27,14 +27,22 @@ module.exports.getBoardInfo = (id) => {
     return db.query(q, params);
 };
 
-module.exports.createThread = (threadPic, color, topic, fpbp, room_id) => {
+module.exports.createThread = (
+    threadPic,
+    color,
+    topic,
+    fpbp,
+    room_id,
+    author_id
+) => {
     const q = `insert into
   threads (
     thread_foto,
     color,
     topic,
     comment,
-    room_id
+    room_id,
+    author_id
   )
 VALUES
   (
@@ -42,25 +50,38 @@ VALUES
     $2,
     $3,
     $4,
-    $5
+    $5,
+    $6
     ) returning *;`;
-    const params = [threadPic, color, topic, fpbp, room_id];
+    const params = [threadPic, color, topic, fpbp, room_id, author_id];
     return db.query(q, params);
 };
 
-module.exports.addComment = (commentID, comment, threadid) => {
-    const q = `insert into comments (comment_id, comment, threadid) VALUES ($1, $2, $3);`;
-    const params = [commentID, comment, threadid];
+module.exports.addComment = (author_id, comment, thread_id, commentColor) => {
+    const q = `insert into comments (author_id, comment, thread_id, color) VALUES ($1, $2, $3, $4);`;
+    const params = [author_id, comment, thread_id, commentColor];
     return db.query(q, params);
 };
-module.exports.addCommentWithPic = (commentID, comment, threadid, pic) => {
-    const q = `insert into comments (comment_id, comment, threadid, comment_foto) VALUES ($1, $2, $3, $4);`;
-    const params = [commentID, comment, threadid, pic];
+// module.exports.addCommentWithPic = (commentID, comment, threadid, pic) => {
+//     const q = `insert into comments (comment_id, comment, threadid, comment_foto) VALUES ($1, $2, $3, $4);`;
+//     const params = [commentID, comment, threadid, pic];
+//     return db.query(q, params);
+// };
+
+module.exports.colorToUser = (author_id, color) => {
+    const q = `insert into colors (author_id, color) VALUES ($1, $2);`;
+    const params = [author_id, color];
+    return db.query(q, params);
+};
+
+module.exports.getUserColor = (author_id) => {
+    const q = `select * from colors where author_id = $1`;
+    const params = [author_id];
     return db.query(q, params);
 };
 
 module.exports.getComment = (id) => {
-    const q = `select * from comments where threadid = $1 order by created_at ASC;`;
+    const q = `select * from comments where thread_id = $1 order by created_at ASC;`;
     const param = [id];
     return db.query(q, param);
 };

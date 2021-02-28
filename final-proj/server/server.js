@@ -37,20 +37,6 @@ app.use(
         maxAge: 24 * 60 * 60 * 1000,
     })
 );
-// app.use(cookieSessionMiddleware);
-// io.use(function (socket, next) {
-//     cookieSessionMiddleware(socket.request, socket.request.res, next);
-// });
-
-// app.post('/api/locationclicked', (req, res) => {
-//     const { lat, lng, time } = req.body;
-//     console.log(lat, lng, time);
-//     const login = uuidv3('Frederico', uuidv3.URL);
-//     console.log(login);
-//     res.send({ express: 'Hello From Express' });
-// });
-// const path = require('path');
-// app.use(express.static(path.join(__dirname, '..', 'public')));
 
 app.get('/api/markers/', async (req, res) => {
     try {
@@ -86,10 +72,21 @@ app.get('/api/board/:board_id', async (req, res) => {
         res.status(404);
     }
 });
-// Below will be the thread creation
+
 app.post('/api/add/thread', async (req, res) => {
     const { fpbp, room_id, topic, threadPic } = req.body;
-
+    let author_id;
+    if (!req.session.userID) {
+        req.session.userID = cryptoRandomString({
+            length: 11,
+            type: 'distinguishable',
+        });
+        author_id = req.session.userID;
+        const userColor = randomColor();
+        await db.colorToUser(author_id, userColor);
+    } else {
+        author_id = req.session.userID;
+    }
     var color = randomColor();
     try {
         const thread = await db.createThread(
@@ -97,10 +94,11 @@ app.post('/api/add/thread', async (req, res) => {
             color,
             topic,
             fpbp,
-            room_id
+            room_id,
+            author_id
         );
-        console.log(thread.rows);
-        res.status(200).json({ thread: thread.rows });
+        const authorColor = db.getUserColor(thread.rows[0].author_id);
+        res.status(200).json({ thread: thread.rows, authorColor: authorColor });
     } catch (error) {
         console.log(error, 'error posting new thread');
         res.status(201).json({ error });
@@ -118,20 +116,34 @@ app.get('/api/comments/:id', async (req, res) => {
 });
 
 app.post('/api/comments/add/', async (req, res) => {
-    const { comment, threadid, image } = req.body;
+    const { comment, thread_id, image } = req.body;
+    let author_id;
+    let commentColor;
+    if (!req.session.userID) {
+        req.session.userID = cryptoRandomString({
+            length: 11,
+            type: 'distinguishable',
+        });
+        author_id = req.session.userID;
+        const userColor = randomColor();
+        await db.colorToUser(author_id, userColor);
+        commentColor = userColor;
+    } else {
+        author_id = req.session.userID;
+        commentColor = await db.getUserColor(author_id);
+        // console.log(commentColor.rows[0].color);
+        commentColor = commentColor.rows[0].color;
+    }
     try {
-        !req.session.UserID
-            ? (req.session.userID = cryptoRandomString({
-                  length: 11,
-                  type: 'distinguishable',
-              }))
-            : req.session.userID;
         const createComment = await db.addComment(
-            req.session.userID,
+            author_id,
             comment,
-            threadid
+            thread_id,
+            commentColor
         );
-        console.log(createComment.rows);
+        res.status(200).json({
+            createComment: createComment.rows,
+        });
     } catch (error) {
         console.log(error, 'error inside comment');
         res.status(201).json({ error: error });
