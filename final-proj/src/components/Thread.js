@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, queryClient } from 'react-query';
 import React, { useState, useEffect } from 'react';
 
 const Thread = (props) => {
@@ -9,8 +9,8 @@ const Thread = (props) => {
         return axios.get(`/api/comments/${props.match.params.id}`);
     };
     const { data, status } = useQuery('comments', fetchComments);
-    console.log(data);
-    console.log(status);
+    // console.log(data);
+    // console.log(status);
 
     const mutation = useMutation((thread) => {
         axios.post('/api/comments/add/', thread);

@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    @responsive {
+        .scrollbar-hidden::-webkit-scrollbar {
+            display: none;
+        }
+    }
+}
+
+.blkBtnColorHover {
+    @apply px-5 py-2 text-sm tracking-wider text-white uppercase transition duration-500 ease-in-out border border-transparent rounded-lg shadow cursor-pointer from-black to-black bg-gradient-to-r hover:from-purple-700 hover:to-pink-600 hover:text-white hover:border-white;
+}
