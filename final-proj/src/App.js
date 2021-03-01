@@ -10,7 +10,7 @@ import Thread from './components/Thread';
 
 function App() {
     return (
-        <div>
+        <div className=''>
             <BrowserRouter>
                 <Route
                     exact

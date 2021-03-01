@@ -13,3 +13,16 @@
 .blkBtnColorHover {
     @apply px-5 py-2 text-sm tracking-wider text-white uppercase transition duration-500 ease-in-out border border-transparent rounded-lg shadow cursor-pointer from-black to-black bg-gradient-to-r hover:from-purple-700 hover:to-pink-600 hover:text-white hover:border-white;
 }
+
+.form {
+    @apply w-3/4 py-1 pl-2 text-sm text-gray-700 bg-gray-200 rounded-lg shadow-md focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-purple-600 focus:border-transparent;
+}
+
+.submitBtn {
+    @apply px-2 py-1 text-sm antialiased font-semibold tracking-wider text-gray-200 uppercase duration-500 ease-in-out bg-purple-400 border-2 border-purple-900 rounded-md shadow-lg hover:bg-purple-700 hover:text-gray-200;
+}
+
+.scrollFix {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}

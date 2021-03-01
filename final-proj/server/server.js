@@ -7,6 +7,8 @@ const db = require('./db');
 const randomColor = require('randomcolor');
 const app = express();
 const cryptoRandomString = require('crypto-random-string');
+const { uploader } = require('./upload');
+const s3 = require('./s3');
 //
 app.use(compression());
 // Logging middleware
@@ -73,6 +75,49 @@ app.get('/api/board/:board_id', async (req, res) => {
     }
 });
 
+// app.post(
+//     '/api/add/thread',
+//     uploader.single('file'),
+//     s3.upload,
+//     yo,
+//     async (req, res) => {
+//         const { s3Url } = require('./secrets.json');
+//         const { filename } = req.file;
+//         console.log(filename);
+//         const url = `${s3Url}${filename}`;
+//         const { fpbp, room_id, topic } = req.body;
+//         let author_id;
+//         let commentColor;
+//         if (!req.session.userID) {
+//             req.session.userID = cryptoRandomString({
+//                 length: 11,
+//                 type: 'distinguishable',
+//             });
+//             author_id = req.session.userID;
+//             const userColor = randomColor();
+//             await db.colorToUser(author_id, userColor);
+//             commentColor = userColor;
+//         } else {
+//             author_id = req.session.userID;
+//             commentColor = await db.getUserColor(author_id);
+//             commentColor = commentColor.rows[0].color;
+//         }
+//         try {
+//             const thread = await db.createThread(
+//                 // threadPic,
+//                 commentColor,
+//                 topic,
+//                 fpbp,
+//                 room_id,
+//                 author_id
+//             );
+//             res.status(200).json({ thread: thread.rows });
+//         } catch (error) {
+//             console.log(error, 'error posting new thread');
+//             res.status(201).json({ error });
+//         }
+//     }
+// );
 app.post('/api/add/thread', async (req, res) => {
     const { fpbp, room_id, topic, threadPic } = req.body;
     let author_id;
@@ -85,6 +130,7 @@ app.post('/api/add/thread', async (req, res) => {
         author_id = req.session.userID;
         const userColor = randomColor();
         await db.colorToUser(author_id, userColor);
+        commentColor = userColor;
     } else {
         author_id = req.session.userID;
         commentColor = await db.getUserColor(author_id);
