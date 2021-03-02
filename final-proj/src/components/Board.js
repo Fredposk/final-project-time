@@ -45,27 +45,19 @@ const Board = (props) => {
     const [uploadOpen, setUploadOpen] = useState(false);
 
     const mutation = useMutation((thread) => {
-        // for (var key of thread.entries()) {
-        //     console.log(key[0] + ', ' + key[1]);
-        // }
-        axios.post('/api/add/thread', thread);
+        axios.post('/api/add/thread', thread.fd);
     });
 
     const upload = () => {
-        // const fd = new FormData();
-        // fd.append('file', threadPic);
-        // fd.append('fpbp', fpbp);
-        // fd.append('topic', topic);
-        // fd.append('room_id', props.match.params.board);
+        const fd = new FormData();
+        fd.append('file', threadPic);
+        fd.append('fpbp', fpbp);
+        fd.append('topic', topic);
+        fd.append('room_id', props.match.params.board);
 
         mutation.mutate({
-            fpbp: fpbp,
-            room_id: props.match.params.board,
-            topic: topic,
-            threadPic: threadPic,
+            fd: fd,
         });
-
-        // axios.post('/api/add/thread', fd);
     };
     // console.log(mutation);
 
