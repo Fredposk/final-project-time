@@ -3,11 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Footer from './Footer';
 
-// import SimpleGlobe from '../icons/Simple_Globe.svg';
-
 const Home = () => {
-    // Here will be a list of all the threads inside the board/ marker
-
     const container = {
         // hidden: { opacity: 0 },
         // visible: {
@@ -71,27 +67,32 @@ const Home = () => {
                         />
                     </motion.svg>
                 </div>
-                <div className='px-2 py-2 m-4 text-xs tracking-wider text-black uppercase transition duration-500 ease-in-out bg-purple-700 border border-black rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'>
+                <Link
+                    to='/about'
+                    className='px-2 py-2 m-4 text-xs tracking-wider text-black uppercase transition duration-500 ease-in-out bg-purple-700 border border-black rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'
+                >
                     About
-                </div>
+                </Link>
             </div>
             <motion.div
-                className='flex flex-col items-center -mt-24 font-black leading-normal tracking-tight text-8xl'
+                className='flex flex-col items-center font-black leading-normal tracking-tight -mt-36 text-8xl'
                 variants={container}
                 animate={'visible'}
             >
-                <motion.div
-                    variants={container}
-                    className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'
-                >
-                    blue
-                </motion.div>
-                <motion.div
-                    variants={container}
-                    className='text-transparent bg-black bg-clip-text'
-                >
-                    dot.
-                </motion.div>
+                <div className='flex'>
+                    <motion.div
+                        variants={container}
+                        className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'
+                    >
+                        blue
+                    </motion.div>
+                    <motion.div
+                        variants={container}
+                        className='text-transparent bg-black bg-clip-text'
+                    >
+                        dot.
+                    </motion.div>
+                </div>
             </motion.div>
             <div className='flex flex-col items-center '>
                 <Link to='/maps' className='blkBtnColorHover'>

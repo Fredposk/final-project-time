@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+// import Delete from './Delete';
 
 const Comms = () => {
     const pageEnter = {

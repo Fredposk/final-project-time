@@ -85,3 +85,15 @@ module.exports.getComment = (id) => {
     const param = [id];
     return db.query(q, param);
 };
+
+module.exports.getThreadsById = (id) => {
+    const q = `select thread_id from threads where author_id = $1`;
+    const params = [id];
+    return db.query(q, params);
+};
+
+module.exports.deletePost = (id) => {
+    const q = `delete from threads where thread_id = $1`;
+    const params = [id];
+    return db.query(q, params);
+};

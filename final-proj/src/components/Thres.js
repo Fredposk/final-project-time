@@ -1,7 +1,16 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Delete from './Delete';
+import { useQuery, useMutation } from 'react-query';
+import axios from 'axios';
 
 const Thres = () => {
+    const { data, status } = useQuery('threads', () =>
+        axios.get(`/api/user/threads`)
+    );
+
+    console.log(data);
+
     const pageEnter = {
         hidden: { y: '-100vw', opacity: 0 },
         visible: {

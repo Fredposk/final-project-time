@@ -199,8 +199,37 @@ app.post('/api/comments/add/', async (req, res) => {
     }
 });
 
-app.get('/api/delete/:id', async (req, res) => {
-    console.log(req.params.id);
+app.get('/api/delete', async (req, res) => {
+    try {
+        res.status(200).json({ userID: req.session.userID });
+    } catch (error) {
+        console.log('error getting posts by id');
+        res.status(201).json({ error: error });
+    }
+});
+
+app.post('/api/delete/post', async (req, res) => {
+    console.log(req.body.post);
+    try {
+        await db.deletePost(req.body.post);
+        res.status(200);
+    } catch (error) {
+        console.log(error, 'error deleting post');
+        res.status(404);
+    }
+});
+
+app.get(`/api/user/threads`, async (req, res) => {
+    console.log(req.session.userID);
+
+    try {
+        const response = await db.getUserThreads(req.session.userID);
+        console.log(response.rows);
+        res.status(200);
+    } catch (error) {
+        console.log('error getting user threads', error);
+        res.status(201).json({ error: error });
+    }
 });
 
 const PORT = process.env.PORT || 5000;

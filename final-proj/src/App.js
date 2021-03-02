@@ -8,6 +8,7 @@ import CreationPage from './components/CreationPage';
 import Board from './components/Board';
 import Thread from './components/Thread';
 import Dots from './components/Dots';
+import About from './components/About';
 
 function App() {
     return (
@@ -20,6 +21,7 @@ function App() {
                 />
                 <Route exact path='/' render={() => <Home />} />
                 <Route exact path='/dots/main' render={() => <Dots />} />
+                <Route exact path='/about' render={() => <About />} />
                 <Route
                     exact
                     path='/board/:board'

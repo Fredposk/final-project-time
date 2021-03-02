@@ -190,7 +190,10 @@ const Board = (props) => {
                                     src='https://picsum.photos/seed/picsum/200/300'
                                     alt={`${thread.topic}`}
                                 />
-                                <Delete id={thread.thread_id} />
+                                <Delete
+                                    id={thread.author_id}
+                                    post={thread.thread_id}
+                                />
                                 <div className='flex flex-col'>
                                     <Link
                                         to={{

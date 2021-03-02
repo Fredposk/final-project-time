@@ -2,9 +2,10 @@ import React from 'react';
 import Footer from './Footer';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import Thres from './Thres';
-import Comms from './Comms';
-import { useState } from 'react';
+import BtnDots from './BtnDots';
+import Globe from '../icons/earth';
+
+// import { useState } from 'react';
 
 const Dots = () => {
     const pathVariants = {
@@ -31,7 +32,7 @@ const Dots = () => {
             transition: { type: 'spring', delay: 0.3, duration: 0.4 },
         },
     };
-    const [page, setPage] = useState('threads');
+
     return (
         <motion.div
             variants={pageEnter}
@@ -55,30 +56,42 @@ const Dots = () => {
                             />
                         </motion.svg>
                     </Link>
+                </div>{' '}
+                <div className='mr-4'>
+                    <BtnDots />
                 </div>
-                <Link
-                    to='/about'
-                    className='px-2 py-2 m-4 text-xs tracking-wider text-black uppercase transition duration-500 ease-in-out bg-purple-700 border border-black rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'
-                >
-                    About
-                </Link>
             </div>
-            <div className='flex justify-center space-x-2 -mt-60'>
-                <button
-                    onClick={() => setPage('threads')}
-                    className='blkBtnColorHover'
-                >
-                    THREADS
-                </button>
-                <button
-                    onClick={() => setPage('comms')}
-                    className='blkBtnColorHover'
-                >
-                    Comments
-                </button>
+            <div className='flex justify-center font-black leading-normal tracking-tight -mt-36 text-8xl'>
+                <motion.div className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'>
+                    blue
+                </motion.div>
+                <motion.div className='text-transparent bg-black bg-clip-text'>
+                    dot.
+                </motion.div>
             </div>
-
-            {page === 'threads' ? <Thres /> : <Comms />}
+            <div className='-mt-24 text-xl text-center text-gray-900'>
+                A Spiced 2021 React Project
+            </div>
+            <div>
+                <div className='-mt-24 text-center '>
+                    <div className='mb-4 text-lg text-gray-900 underline'>
+                        {' '}
+                        Tech Stack:{' '}
+                    </div>
+                    <ul className='inline-block text-left text-black list-disc list-inside text-md'>
+                        <li>React</li>
+                        <li>React-Query</li>
+                        <li>Tailwind CSS</li>
+                        <li>framer-motion</li>
+                        <li>@react-google-maps/api</li>
+                    </ul>
+                </div>
+            </div>
+            <div className='flex justify-center -mt-12'>
+                <div className=' w-36 h-36'>
+                    <Globe />
+                </div>
+            </div>
 
             <Footer />
         </motion.div>

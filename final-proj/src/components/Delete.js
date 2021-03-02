@@ -2,20 +2,20 @@ import React from 'react';
 import { useQuery, useMutation } from 'react-query';
 import axios from 'axios';
 
-const Delete = ({ id }) => {
-    // const { data, status } = useQuery('delete', () =>
-    //     axios.get(`/api/delete/`)
-    // );
-
-    // console.log(data);
-    console.log(id);
+const Delete = ({ id, post }) => {
+    const { data } = useQuery('delete', () => axios.get(`/api/delete`));
+    // console.log(data?.data?.userID);
+    const mutation = useMutation((post) => {
+        axios.post('/api/delete/post', post);
+    });
 
     return (
         <>
-            {id === '746e8eec-7857-49e4-a407-6f9188b724fc' && (
+            {id === data?.data?.userID && (
                 <svg
                     onClick={() => {
-                        console.log('clicked');
+                        mutation.mutate({ post });
+                        // console.log(post);
                     }}
                     className='absolute z-50 w-5 h-5 m-1 cursor-pointer'
                     xmlns='http://www.w3.org/2000/svg'
