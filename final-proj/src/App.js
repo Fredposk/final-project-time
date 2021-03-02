@@ -7,6 +7,7 @@ import Home from './components/Home';
 import CreationPage from './components/CreationPage';
 import Board from './components/Board';
 import Thread from './components/Thread';
+import Dots from './components/Dots';
 
 function App() {
     return (
@@ -18,6 +19,7 @@ function App() {
                     render={(props) => <Map history={props.history} />}
                 />
                 <Route exact path='/' render={() => <Home />} />
+                <Route exact path='/dots/main' render={() => <Dots />} />
                 <Route
                     exact
                     path='/board/:board'

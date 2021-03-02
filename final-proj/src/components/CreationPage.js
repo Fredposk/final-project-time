@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import BtnDots from './BtnDots';
 
 const pathVariants = {
     hidden: {
@@ -52,53 +53,69 @@ const CreationPage = (props) => {
             animate='visible'
             className='flex flex-col justify-between min-h-screen bg-gradient-to-r from-purple-700 to-pink-700'
         >
-            <div className='flex items-center justify-between'>
-                <div className='w-12 h-12 m-4 '>
-                    <Link
-                        to={{
-                            pathname: '/maps',
-                            state: {
-                                lat: props.history.location.state.lat,
-                                lng: props.history.location.state.lng,
-                            },
-                        }}
-                    >
-                        <motion.svg
-                            className='bg-transparent stroke-current '
-                            xmlns='http://www.w3.org/2000/svg'
-                            viewBox='0 0 20 20'
+            <div>
+                <div className='flex items-center justify-between'>
+                    <div className='w-12 h-12 m-4 '>
+                        <Link
+                            to={{
+                                pathname: '/maps',
+                                state: {
+                                    lat: props.history.location.state.lat,
+                                    lng: props.history.location.state.lng,
+                                },
+                            }}
                         >
-                            <motion.path
-                                initial='hidden'
-                                animate='visible'
-                                variants={pathVariants}
-                                d='M13 8V0L8.11 5.87 3 12h4v8L17 8h-4z'
-                            />
-                        </motion.svg>
-                    </Link>
+                            <motion.svg
+                                className='bg-transparent stroke-current '
+                                xmlns='http://www.w3.org/2000/svg'
+                                viewBox='0 0 20 20'
+                            >
+                                <motion.path
+                                    initial='hidden'
+                                    animate='visible'
+                                    variants={pathVariants}
+                                    d='M13 8V0L8.11 5.87 3 12h4v8L17 8h-4z'
+                                />
+                            </motion.svg>
+                        </Link>
+                    </div>
+                    <div className='flex items-center mr-3 space-x-2'>
+                        <Link
+                            className='px-2 py-2 text-xs tracking-wider text-white uppercase transition duration-500 ease-in-out bg-black border border-black rounded-lg shadow cursor-pointer hover:bg-purple-700 hover:text-black'
+                            to={{
+                                pathname: '/maps',
+                                state: {
+                                    lat: props.history.location.state.lat,
+                                    lng: props.history.location.state.lng,
+                                },
+                            }}
+                        >
+                            BACK
+                        </Link>
+                        <BtnDots />
+                    </div>
                 </div>
-                <div className='px-2 py-2 m-4 text-xs tracking-wider text-black uppercase transition duration-500 ease-in-out bg-purple-700 border border-black rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'>
-                    Boards
+                <div className='flex flex-col items-center mt-8 space-y-4'>
+                    <div className='mb-16 text-4xl font-black leading-normal tracking-tight text-transparent bg-black bg-clip-text'>
+                        GIVE YOUR DOT A NAME:
+                    </div>
+
+                    <input
+                        className='text-center form'
+                        onChange={(e) => setInputName(e.target.value)}
+                        type='text'
+                        placeholder='Name for dot'
+                    />
+
+                    <button
+                        className='px-2 py-2 text-xs tracking-wider text-white uppercase transition duration-500 ease-in-out bg-black border border-black rounded-lg shadow cursor-pointer hover:bg-purple-700 hover:text-black'
+                        onClick={createNewBoard}
+                    >
+                        CREATE DOT
+                    </button>
                 </div>
             </div>
-            <input
-                className='w-1/3 py-1 pl-2 my-6 ml-12 text-sm text-gray-700 bg-gray-200 rounded-lg shadow-md focus:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-transparent'
-                onChange={(e) => setInputName(e.target.value)}
-                type='text'
-                placeholder='Name for board'
-            />
-            <button onClick={createNewBoard}>GO!</button>
-            <Link
-                to={{
-                    pathname: '/maps',
-                    state: {
-                        lat: props.history.location.state.lat,
-                        lng: props.history.location.state.lng,
-                    },
-                }}
-            >
-                CLICK TO GO BACK
-            </Link>
+            {/*  */}
             <div className='flex justify-around py-2 text-gray-400 uppercase bg-black font-extralight'>
                 <div className='cursor-pointer'>Privacy</div>
                 <div className='cursor-pointer'>Legal</div>{' '}

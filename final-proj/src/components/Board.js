@@ -3,12 +3,15 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import Footer from './Footer';
+import BtnDots from './BtnDots';
+import Delete from './Delete';
 
 const Board = (props) => {
     const { data, status } = useQuery('threads', () =>
         axios.get(`/api/board/${props.match.params.board}`)
     );
-    // console.log(data);
+    // console.log(data?.data?.boardInfo[0]?.name);
     // console.log(status);
 
     const pathVariants = {
@@ -100,13 +103,11 @@ const Board = (props) => {
                 <div className='flex m-4 space-x-2'>
                     <div
                         onClick={() => setUploadOpen(!uploadOpen)}
-                        className='px-2 py-2 text-xs tracking-wider text-white uppercase transition duration-500 ease-in-out bg-purple-700 border border-transparent rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'
+                        className='px-2 py-2 text-xs tracking-wider text-white uppercase transition duration-500 ease-in-out bg-black border border-transparent rounded-lg shadow cursor-pointer hover:text-black hover:border-black hover:bg-purple-700'
                     >
                         POST NEW
                     </div>
-                    <div className='px-2 py-2 text-xs tracking-wider text-white uppercase transition duration-500 ease-in-out bg-black border border-black rounded-lg shadow cursor-pointer'>
-                        DOTS
-                    </div>
+                    <BtnDots />
                 </div>
                 {uploadOpen && (
                     <button
@@ -116,6 +117,11 @@ const Board = (props) => {
                     ></button>
                 )}
             </div>
+            {status === 'success' && (
+                <div className='text-4xl font-black leading-normal tracking-tight text-center text-transparent bg-black bg-clip-text'>
+                    {data?.data?.boardInfo[0]?.name}
+                </div>
+            )}
             {uploadOpen && (
                 <div className='absolute z-30 p-2 mt-1 bg-gray-100 border-2 border-purple-700 rounded-lg shadow-lg min-w-min left-2'>
                     <form className='flex flex-col items-start space-y-2'>
@@ -178,23 +184,29 @@ const Board = (props) => {
                             className='inline-flex flex-col items-center p-1 my-2 rounded-lg shadow-xl'
                             style={{ backgroundColor: `${thread.color}` }}
                         >
-                            <Link
-                                to={{
-                                    pathname: `/thread/${thread.thread_id}`,
-                                    state: {
-                                        lat: data?.data?.boardInfo[0]?.lat,
-                                        lng: data?.data?.boardInfo[0]?.lng,
-                                        room_id: props.match.params.board,
-                                    },
-                                }}
-                            >
-                                <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
-                                    <img
-                                        className='object-cover h-32 rounded-lg shadow-xl w-18'
-                                        src='https://picsum.photos/seed/picsum/200/300'
-                                        alt={`${thread.topic}`}
-                                    />
-                                    <div className='flex flex-col'>
+                            <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
+                                <img
+                                    className='relative object-cover h-32 rounded-lg shadow-xl w-18'
+                                    src='https://picsum.photos/seed/picsum/200/300'
+                                    alt={`${thread.topic}`}
+                                />
+                                <Delete id={thread.thread_id} />
+                                <div className='flex flex-col'>
+                                    <Link
+                                        to={{
+                                            pathname: `/thread/${thread.thread_id}`,
+                                            state: {
+                                                lat:
+                                                    data?.data?.boardInfo[0]
+                                                        ?.lat,
+                                                lng:
+                                                    data?.data?.boardInfo[0]
+                                                        ?.lng,
+                                                room_id:
+                                                    props.match.params.board,
+                                            },
+                                        }}
+                                    >
                                         <div className='w-56 text-center text-gray-200 text-wrap'>
                                             {' '}
                                             {thread.topic}
@@ -203,42 +215,21 @@ const Board = (props) => {
                                             {' '}
                                             {thread.comment}
                                         </div>
+                                    </Link>
+                                </div>
+                                <div className='flex flex-col items-center justify-between overflow-hidden w-min'>
+                                    <div className='text-xs font-thin text-gray-300'>
+                                        3 hours ago
                                     </div>
-                                    <div className='flex flex-col items-center justify-between overflow-hidden w-min'>
-                                        <div className='text-xs font-thin text-gray-300'>
-                                            3 hours ago
-                                        </div>
-                                        <div className='px-2 py-1 mb-1 text-xs text-center text-gray-400 bg-gray-800 rounded-full'>
-                                            {thread.author_id}
-                                        </div>
+                                    <div className='px-2 py-1 mb-1 text-xs text-center text-gray-400 bg-gray-800 rounded-full'>
+                                        {thread.author_id}
                                     </div>
                                 </div>
-                            </Link>
+                            </div>
                         </div>
                     </div>
                 ))}
-            <div className='flex justify-around py-1 text-gray-400 uppercase bg-black font-extralight'>
-                <div className='cursor-pointer'>Privacy</div>
-                <div className='cursor-pointer'>Legal</div>{' '}
-                <button
-                    onClick={() =>
-                        window.open('https://github.com/Fredposk', '_blank')
-                    }
-                    rel='noopener noreferrer'
-                >
-                    <svg
-                        className='w-5 h-5 ml-2 cursor-pointer'
-                        role='img'
-                        xmlns='http://www.w3.org/2000/svg'
-                        viewBox='0 0 480 512'
-                    >
-                        <path
-                            fill='currentColor'
-                            d='M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z'
-                        ></path>
-                    </svg>
-                </button>
-            </div>
+            <Footer />
         </motion.div>
     );
 };

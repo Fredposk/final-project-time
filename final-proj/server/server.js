@@ -199,6 +199,10 @@ app.post('/api/comments/add/', async (req, res) => {
     }
 });
 
+app.get('/api/delete/:id', async (req, res) => {
+    console.log(req.params.id);
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, function () {
     console.log(`I'm listening on ${PORT}`);
