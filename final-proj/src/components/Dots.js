@@ -5,8 +5,9 @@ import { Link } from 'react-router-dom';
 import Thres from './Thres';
 import Comms from './Comms';
 import { useState } from 'react';
+import BluedotLogo from './BluedotLogo';
 
-const Dots = () => {
+const Dots = (props) => {
     const pathVariants = {
         hidden: {
             opacity: 0,
@@ -56,6 +57,7 @@ const Dots = () => {
                         </motion.svg>
                     </Link>
                 </div>
+                <BluedotLogo />
                 <Link
                     to='/about'
                     className='px-2 py-2 m-4 text-xs tracking-wider text-black uppercase transition duration-500 ease-in-out bg-purple-700 border border-black rounded-lg shadow cursor-pointer hover:text-white hover:border-black hover:bg-black'
@@ -63,7 +65,7 @@ const Dots = () => {
                     About
                 </Link>
             </div>
-            <div className='flex justify-center space-x-2 -mt-60'>
+            <div className='flex justify-center space-x-2 '>
                 <button
                     onClick={() => setPage('threads')}
                     className='blkBtnColorHover'
@@ -77,8 +79,9 @@ const Dots = () => {
                     Comments
                 </button>
             </div>
-
-            {page === 'threads' ? <Thres /> : <Comms />}
+            <div className='h-full text-center '>
+                {page === 'threads' ? <Thres props={props.match} /> : <Comms />}
+            </div>
 
             <Footer />
         </motion.div>

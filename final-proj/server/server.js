@@ -80,10 +80,8 @@ app.post(
     uploader.single('file'),
     s3.upload,
     async (req, res) => {
-        console.log(req.body);
         const { s3Url } = require('./secrets.json');
         const { filename } = req.file;
-        console.log(filename);
         const url = `${s3Url}${filename}`;
         const { fpbp, room_id, topic } = req.body;
         let author_id;
@@ -104,7 +102,6 @@ app.post(
         }
         try {
             const thread = await db.createThread(
-                // threadPic,
                 url,
                 commentColor,
                 topic,
@@ -119,46 +116,14 @@ app.post(
         }
     }
 );
-// app.post('/api/add/thread', async (req, res) => {
-//     const { fpbp, room_id, topic, threadPic } = req.body;
-//     let author_id;
-//     let commentColor;
-//     if (!req.session.userID) {
-//         req.session.userID = cryptoRandomString({
-//             length: 11,
-//             type: 'distinguishable',
-//         });
-//         author_id = req.session.userID;
-//         const userColor = randomColor();
-//         await db.colorToUser(author_id, userColor);
-//         commentColor = userColor;
-//     } else {
-//         author_id = req.session.userID;
-//         commentColor = await db.getUserColor(author_id);
-//         // console.log(commentColor.rows[0].color);
-//         commentColor = commentColor.rows[0].color;
-//     }
-//     try {
-//         const thread = await db.createThread(
-//             threadPic,
-//             commentColor,
-//             topic,
-//             fpbp,
-//             room_id,
-//             author_id
-//         );
-
-//         res.status(200).json({ thread: thread.rows });
-//     } catch (error) {
-//         console.log(error, 'error posting new thread');
-//         res.status(201).json({ error });
-//     }
-// });
-
 app.get('/api/comments/:id', async (req, res) => {
     try {
         const comment = await db.getComment(req.params.id);
-        res.status(200).json({ comments: comment.rows });
+        const response = await db.getFirstpost(req.params.id);
+        res.status(200).json({
+            comments: comment.rows,
+            response: response.rows,
+        });
     } catch (error) {
         console.log(error, 'error getting comments');
         res.status(201).json({ error });
@@ -166,7 +131,7 @@ app.get('/api/comments/:id', async (req, res) => {
 });
 
 app.post('/api/comments/add/', async (req, res) => {
-    const { comment, thread_id, image } = req.body;
+    const { comment, thread_id } = req.body;
     let author_id;
     let commentColor;
     if (!req.session.userID) {
@@ -212,6 +177,7 @@ app.get('/api/delete', async (req, res) => {
 app.post('/api/delete/post', async (req, res) => {
     console.log(req.body.post);
     try {
+        await db.deleteComment(req.body.post);
         await db.deletePost(req.body.post);
         res.status(200);
     } catch (error) {
@@ -220,13 +186,22 @@ app.post('/api/delete/post', async (req, res) => {
     }
 });
 
-app.get(`/api/user/threads`, async (req, res) => {
+app.get('/api/user/threads', async (req, res) => {
     console.log(req.session.userID);
 
     try {
         const response = await db.getUserThreads(req.session.userID);
-        console.log(response.rows);
-        res.status(200);
+        res.status(200).json({ response: response.rows });
+    } catch (error) {
+        console.log('error getting user threads', error);
+        res.status(201).json({ error: error });
+    }
+});
+app.get('/api/user/comments', async (req, res) => {
+    console.log(req.session.userID);
+    try {
+        const response = await db.getUserComments(req.session.userID);
+        res.status(200).json({ response: response.rows });
     } catch (error) {
         console.log('error getting user threads', error);
         res.status(201).json({ error: error });

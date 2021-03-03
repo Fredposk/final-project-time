@@ -42,7 +42,7 @@ const Dots = () => {
         >
             <div className='flex items-center justify-between'>
                 <div className='w-12 h-12 m-4 '>
-                    <Link to='/maps'>
+                    <Link to='/'>
                         <motion.svg
                             className='bg-transparent stroke-current '
                             xmlns='http://www.w3.org/2000/svg'
@@ -61,7 +61,7 @@ const Dots = () => {
                     <BtnDots />
                 </div>
             </div>
-            <div className='flex justify-center font-black leading-normal tracking-tight -mt-36 text-8xl'>
+            <div className='flex justify-center -mt-24 font-black leading-normal tracking-tight text-8xl'>
                 <motion.div className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'>
                     blue
                 </motion.div>
@@ -69,27 +69,30 @@ const Dots = () => {
                     dot.
                 </motion.div>
             </div>
-            <div className='-mt-24 text-xl text-center text-gray-900'>
-                A Spiced 2021 React Project
-            </div>
-            <div>
-                <div className='-mt-24 text-center '>
-                    <div className='mb-4 text-lg text-gray-900 underline'>
-                        {' '}
-                        Tech Stack:{' '}
-                    </div>
-                    <ul className='inline-block text-left text-black list-disc list-inside text-md'>
-                        <li>React</li>
-                        <li>React-Query</li>
-                        <li>Tailwind CSS</li>
-                        <li>framer-motion</li>
-                        <li>@react-google-maps/api</li>
-                    </ul>
+            <div className='flex flex-col items-center justify-center -mt-24'>
+                <div className='text-xl text-gray-900 '>
+                    A Spiced 2021 React Project
                 </div>
-            </div>
-            <div className='flex justify-center -mt-12'>
-                <div className=' w-36 h-36'>
-                    <Globe />
+                <div>
+                    <div className=''>
+                        <div className='mb-4 text-lg text-center text-gray-300 underline '>
+                            {' '}
+                            Tech Stack:{' '}
+                        </div>
+                        <ul className='inline-block text-left text-black list-disc list-inside text-md'>
+                            <li>React</li>
+                            <li>React-Query</li>
+                            <li>Tailwind CSS</li>
+                            <li>framer-motion</li>
+                            <li>@react-google-maps/api</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div className='flex justify-center'>
+                    <div className='mt-12 w-36 h-36'>
+                        <Globe />
+                    </div>
                 </div>
             </div>
 

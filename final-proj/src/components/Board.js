@@ -3,16 +3,23 @@ import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { formatDistanceToNow } from 'date-fns';
 import Footer from './Footer';
 import BtnDots from './BtnDots';
 import Delete from './Delete';
 
 const Board = (props) => {
     const { data, status } = useQuery('threads', () =>
-        axios.get(`/api/board/${props.match.params.board}`)
+        axios.get(`/api/board/${props?.match?.params?.board}`)
     );
-    // console.log(data?.data?.boardInfo[0]?.name);
+    // console.log(props);
+
+    // console.log(props.match.params);
+    // console.log(data?.data?.boardInfo[0]?.lat);
+    // console.log(data?.data?.boardInfo[0]?.lng);
     // console.log(status);
+
+    // console.log(data);
 
     const pathVariants = {
         hidden: {
@@ -48,18 +55,19 @@ const Board = (props) => {
         axios.post('/api/add/thread', thread.fd);
     });
 
+    console.log(mutation.isLoading);
+
     const upload = () => {
         const fd = new FormData();
         fd.append('file', threadPic);
         fd.append('fpbp', fpbp);
         fd.append('topic', topic);
-        fd.append('room_id', props.match.params.board);
+        fd.append('room_id', props?.match?.params?.board);
 
         mutation.mutate({
             fd: fd,
         });
     };
-    // console.log(mutation);
 
     return (
         <motion.div
@@ -74,8 +82,12 @@ const Board = (props) => {
                     to={{
                         pathname: '/maps',
                         state: {
-                            lat: data?.data?.boardInfo[0]?.lat,
-                            lng: data?.data?.boardInfo[0]?.lng,
+                            lat:
+                                status === 'success' &&
+                                data?.data?.boardInfo[0]?.lat,
+                            lng:
+                                status === 'success' &&
+                                data?.data?.boardInfo[0]?.lng,
                         },
                     }}
                 >
@@ -115,10 +127,11 @@ const Board = (props) => {
                 </div>
             )}
             {uploadOpen && (
-                <div className='absolute z-30 p-2 mt-1 bg-gray-100 border-2 border-purple-700 rounded-lg shadow-lg min-w-min left-2'>
+                <div className='absolute z-50 p-2 mt-1 bg-gray-100 border-2 border-purple-700 rounded-lg shadow-lg min-w-min left-2'>
                     <form className='flex flex-col items-start space-y-2'>
                         <input
                             className='mt-1 form'
+                            required
                             type='text'
                             maxLength='65'
                             placeholder='Topic'
@@ -126,6 +139,7 @@ const Board = (props) => {
                         />
                         <textarea
                             rows='3'
+                            required='required'
                             style={{ resize: 'none' }}
                             className='form'
                             type='text'
@@ -198,25 +212,30 @@ const Board = (props) => {
                                                     data?.data?.boardInfo[0]
                                                         ?.lng,
                                                 room_id:
-                                                    props.match.params.board,
+                                                    props?.match?.params?.board,
                                             },
                                         }}
                                     >
-                                        <div className='w-56 text-center text-gray-200 text-wrap'>
-                                            {' '}
-                                            {thread.topic}
-                                        </div>
-                                        <div className='w-56 mt-6 text-center text-gray-200 text-wrap'>
-                                            {' '}
-                                            {thread.comment}
+                                        <div className='w-56 mt-4 ml-3 space-y-3 text-left text-gray-200 text-wrap'>
+                                            <div className=''>
+                                                {' '}
+                                                {thread.topic}
+                                            </div>
+                                            <div className=''>
+                                                {' '}
+                                                {thread.comment}
+                                            </div>
                                         </div>
                                     </Link>
                                 </div>
-                                <div className='flex flex-col items-center justify-between overflow-hidden w-min'>
-                                    <div className='text-xs font-thin text-gray-300'>
-                                        3 hours ago
+                                <div className='relative w-min'>
+                                    <div className='absolute top-0 block mt-1 text-xs font-thin text-gray-300 whitespace-nowrap right-3 '>
+                                        {formatDistanceToNow(
+                                            new Date(thread.created_at),
+                                            { addSuffix: true }
+                                        )}
                                     </div>
-                                    <div className='px-2 py-1 mb-1 text-xs text-center text-gray-400 bg-gray-800 rounded-full'>
+                                    <div className='absolute bottom-0 right-0 px-2 py-1 mb-1 text-xs text-center text-gray-400 bg-gray-800 rounded-full'>
                                         {thread.author_id}
                                     </div>
                                 </div>

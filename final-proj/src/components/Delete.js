@@ -17,7 +17,7 @@ const Delete = ({ id, post }) => {
                         mutation.mutate({ post });
                         // console.log(post);
                     }}
-                    className='absolute z-50 w-5 h-5 m-1 cursor-pointer'
+                    className='absolute z-30 w-5 h-5 m-1 cursor-pointer fill-current '
                     xmlns='http://www.w3.org/2000/svg'
                     viewBox='0 0 20 20'
                 >

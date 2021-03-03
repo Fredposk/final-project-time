@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Footer from './Footer';
+import Globe from '../icons/earth';
 
 const Home = () => {
     const container = {
@@ -27,12 +28,9 @@ const Home = () => {
         visible: {
             opacity: 1,
             pathLength: 1,
-            fill: 'rgba(109, 40, 217, 1)',
+            fill: 'rgba(0, 0, 0, 1)',
             transition: {
                 duration: 3,
-                repeat: Infinity,
-                repeatType: 'mirror',
-                repeatDelay: 1.5,
             },
         },
     };
@@ -74,30 +72,40 @@ const Home = () => {
                     About
                 </Link>
             </div>
-            <motion.div
-                className='flex flex-col items-center font-black leading-normal tracking-tight -mt-36 text-8xl'
-                variants={container}
-                animate={'visible'}
-            >
-                <div className='flex'>
-                    <motion.div
-                        variants={container}
-                        className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'
-                    >
-                        blue
-                    </motion.div>
-                    <motion.div
-                        variants={container}
-                        className='text-transparent bg-black bg-clip-text'
-                    >
-                        dot.
-                    </motion.div>
+            <div className='-mt-24 space-y-8'>
+                <motion.div
+                    className='flex flex-col items-center font-black leading-normal tracking-tight text-8xl'
+                    variants={container}
+                    animate={'visible'}
+                >
+                    <div className='flex'>
+                        <motion.div
+                            variants={container}
+                            className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'
+                        >
+                            blue
+                        </motion.div>
+                        <motion.div
+                            variants={container}
+                            className='text-transparent bg-black bg-clip-text'
+                        >
+                            dot.
+                        </motion.div>
+                    </div>
+                </motion.div>
+
+                <div className='flex flex-col items-center'>
+                    <div className='flex justify-center'>
+                        <div className='w-60 h-60 '>
+                            <Globe />
+                        </div>
+                    </div>
+                    <div className='flex flex-col items-center mt-12'>
+                        <Link to='/maps' className='blkBtnColorHover'>
+                            Find your dot
+                        </Link>
+                    </div>
                 </div>
-            </motion.div>
-            <div className='flex flex-col items-center '>
-                <Link to='/maps' className='blkBtnColorHover'>
-                    Find your dot
-                </Link>
             </div>
             <Footer />
         </div>

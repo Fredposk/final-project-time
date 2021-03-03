@@ -16,7 +16,17 @@ module.exports.getMarkers = () => {
 };
 
 module.exports.getThreads = (id) => {
-    const q = `select * from threads where room_id = $1`;
+    const q = `select * from threads where room_id = $1 order by created_at DESC`;
+    const params = [id];
+    return db.query(q, params);
+};
+module.exports.getUserThreads = (id) => {
+    const q = `select * from threads where author_id = $1 order by created_at DESC`;
+    const params = [id];
+    return db.query(q, params);
+};
+module.exports.getUserComments = (id) => {
+    const q = `select * from comments where author_id = $1 order by created_at DESC`;
     const params = [id];
     return db.query(q, params);
 };
@@ -62,11 +72,6 @@ module.exports.addComment = (author_id, comment, thread_id, commentColor) => {
     const params = [author_id, comment, thread_id, commentColor];
     return db.query(q, params);
 };
-// module.exports.addCommentWithPic = (commentID, comment, threadid, pic) => {
-//     const q = `insert into comments (comment_id, comment, threadid, comment_foto) VALUES ($1, $2, $3, $4);`;
-//     const params = [commentID, comment, threadid, pic];
-//     return db.query(q, params);
-// };
 
 module.exports.colorToUser = (author_id, color) => {
     const q = `insert into colors (author_id, color) VALUES ($1, $2);`;
@@ -91,9 +96,19 @@ module.exports.getThreadsById = (id) => {
     const params = [id];
     return db.query(q, params);
 };
+module.exports.getFirstpost = (id) => {
+    const q = `select * from threads where thread_id = $1`;
+    const params = [id];
+    return db.query(q, params);
+};
 
 module.exports.deletePost = (id) => {
     const q = `delete from threads where thread_id = $1`;
+    const params = [id];
+    return db.query(q, params);
+};
+module.exports.deleteComment = (id) => {
+    const q = `delete from comments where comment_id = $1`;
     const params = [id];
     return db.query(q, params);
 };

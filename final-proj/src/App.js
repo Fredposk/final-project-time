@@ -20,7 +20,13 @@ function App() {
                     render={(props) => <Map history={props.history} />}
                 />
                 <Route exact path='/' render={() => <Home />} />
-                <Route exact path='/dots/main' render={() => <Dots />} />
+                <Route
+                    exact
+                    path='/dots/main'
+                    render={(props) => (
+                        <Dots history={props.history} match={props.match} />
+                    )}
+                />
                 <Route exact path='/about' render={() => <About />} />
                 <Route
                     exact

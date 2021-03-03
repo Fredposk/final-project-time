@@ -2,6 +2,7 @@ import { useCallback, useState, useRef } from 'react';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import Footer from './Footer';
 import BtnDots from './BtnDots';
+import BluedotLogo from './BluedotLogo';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import axios from 'axios';
 import { useQuery } from 'react-query';
@@ -157,6 +158,7 @@ function Map(props) {
                         </motion.svg>
                     </Link>
                 </div>
+                <BluedotLogo />
                 <BtnDots />
             </div>
             <div className='inline-flex justify-center mx-1 border-2 border-black shadow-lg '>
@@ -176,7 +178,7 @@ function Map(props) {
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 icon={{
                                     url:
-                                        'https://www.pinclipart.com/picdir/middle/491-4917893_chat-icon-svg-png-icon-free-download-chat.png',
+                                        'https://www.svgrepo.com/show/26701/flash-lightning.svg',
                                     scaledSize: new window.google.maps.Size(
                                         30,
                                         30
@@ -199,9 +201,9 @@ function Map(props) {
                                 setSelected(null);
                             }}
                         >
-                            <div>
+                            <div className='tracking-wide text-gray-800 shadow text-md font-blac'>
                                 <Link to={`/board/${selected.room_id}`}>
-                                    click to see more
+                                    <div>{selected.name}</div>
                                 </Link>
                             </div>
                         </InfoWindow>
