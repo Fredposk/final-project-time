@@ -152,7 +152,7 @@ const Thread = (props) => {
             )}
             <div className='flex flex-col items-center '>
                 {uploadOpen && (
-                    <div className='absolute z-50 w-2/3 p-2 mt-1 bg-gray-100 border-2 border-purple-700 rounded-lg shadow-lg min-w-min left-2'>
+                    <div className='absolute top-0 z-50 w-2/3 p-2 mt-1 bg-gray-100 border-2 border-purple-700 rounded-lg shadow-lg min-w-min left-2'>
                         <form className='flex flex-col items-start space-y-2'>
                             <textarea
                                 rows='3'
