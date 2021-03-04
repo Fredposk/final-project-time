@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -12,14 +12,8 @@ const Board = (props) => {
     const { data, status } = useQuery('threads', () =>
         axios.get(`/api/board/${props?.match?.params?.board}`)
     );
-    // console.log(props);
 
-    // console.log(props.match.params);
-    // console.log(data?.data?.boardInfo[0]?.lat);
-    // console.log(data?.data?.boardInfo[0]?.lng);
-    // console.log(status);
-
-    // console.log(data);
+    const queryClient = useQueryClient();
 
     const pathVariants = {
         hidden: {
@@ -50,12 +44,13 @@ const Board = (props) => {
     const [topic, setTopic] = useState('');
     const [fpbp, setFpbp] = useState('');
     const [uploadOpen, setUploadOpen] = useState(false);
+    const [spinner, setSpinner] = useState(false);
 
-    const mutation = useMutation((thread) => {
+    const addThread = (thread) => {
         axios.post('/api/add/thread', thread.fd);
-    });
+    };
 
-    console.log(mutation.isLoading);
+    const mutation = useMutation(addThread);
 
     const upload = () => {
         const fd = new FormData();
@@ -84,10 +79,10 @@ const Board = (props) => {
                         state: {
                             lat:
                                 status === 'success' &&
-                                data?.data?.boardInfo[0]?.lat,
+                                data?.data?.boardInfo?.[0]?.lat,
                             lng:
                                 status === 'success' &&
-                                data?.data?.boardInfo[0]?.lng,
+                                data?.data?.boardInfo?.[0]?.lng,
                         },
                     }}
                 >
@@ -123,7 +118,7 @@ const Board = (props) => {
             </div>
             {status === 'success' && (
                 <div className='text-4xl font-black leading-normal tracking-tight text-center text-transparent bg-black bg-clip-text'>
-                    {data?.data?.boardInfo[0]?.name}
+                    {data?.data?.boardInfo?.[0]?.name}
                 </div>
             )}
             {uploadOpen && (
@@ -167,7 +162,7 @@ const Board = (props) => {
                             >
                                 submit
                             </button>
-                            {mutation.isLoading && (
+                            {spinner && (
                                 <svg
                                     className='w-4 h-4 ml-2 fill-current animate-spin'
                                     xmlns='http://www.w3.org/2000/svg'
@@ -192,8 +187,8 @@ const Board = (props) => {
                         >
                             <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
                                 <img
-                                    className='relative object-cover h-32 rounded-lg shadow-xl w-18'
-                                    src='https://picsum.photos/seed/picsum/200/300'
+                                    className='relative object-cover w-20 rounded-lg shadow-xl h-36 '
+                                    src={`${thread.thread_foto}`}
                                     alt={`${thread.topic}`}
                                 />
                                 <Delete
@@ -206,10 +201,10 @@ const Board = (props) => {
                                             pathname: `/thread/${thread.thread_id}`,
                                             state: {
                                                 lat:
-                                                    data?.data?.boardInfo[0]
+                                                    data?.data?.boardInfo?.[0]
                                                         ?.lat,
                                                 lng:
-                                                    data?.data?.boardInfo[0]
+                                                    data?.data?.boardInfo?.[0]
                                                         ?.lng,
                                                 room_id:
                                                     props?.match?.params?.board,

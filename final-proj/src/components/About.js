@@ -29,7 +29,7 @@ const Dots = () => {
         visible: {
             x: 0,
             opacity: 1,
-            transition: { type: 'spring', delay: 0.3, duration: 0.4 },
+            transition: { type: 'spring', duration: 0.4 },
         },
     };
 
@@ -70,22 +70,35 @@ const Dots = () => {
                 </motion.div>
             </div>
             <div className='flex flex-col items-center justify-center -mt-24'>
-                <div className='text-xl text-gray-900 '>
-                    A Spiced 2021 React Project
+                <div className='font-mono text-xs tracking-tighter text-gray-200 '>
+                    2021 React Project Spiced Academy
+                    <span className='text-sm text-blue-500'> Adobo</span>
                 </div>
                 <div>
                     <div className=''>
-                        <div className='mb-4 text-lg text-center text-gray-300 underline '>
+                        <div className='mx-2 mt-6 text-center text-blue-200 text-md'>
                             {' '}
-                            Tech Stack:{' '}
+                            <span className='text-lg font-black leading-normal tracking-tight'>
+                                <span className='text-transparent bg-clip-text bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600'>
+                                    blue
+                                    <span className='text-transparent bg-black bg-clip-text'>
+                                        dot
+                                    </span>
+                                </span>{' '}
+                            </span>{' '}
+                            is a mobile app that allows users to generate POI
+                            (points of interest) using google maps to share
+                            ideas and photos anonymously while maintaining a
+                            digital identity traced to your own IP and providing
+                            an alphanumeric identifier.
                         </div>
-                        <ul className='inline-block text-left text-black list-disc list-inside text-md'>
+                        {/* <ul className='inline-block text-left text-black list-disc list-inside text-md'>
                             <li>React</li>
                             <li>React-Query</li>
                             <li>Tailwind CSS</li>
                             <li>framer-motion</li>
                             <li>@react-google-maps/api</li>
-                        </ul>
+                        </ul> */}
                     </div>
                 </div>
 

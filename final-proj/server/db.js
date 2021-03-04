@@ -25,6 +25,11 @@ module.exports.getUserThreads = (id) => {
     const params = [id];
     return db.query(q, params);
 };
+module.exports.getRecentThreads = () => {
+    const q = `select * from threads  order by created_at DESC LIMIT 10`;
+    return db.query(q);
+};
+
 module.exports.getUserComments = (id) => {
     const q = `select * from comments where author_id = $1 order by created_at DESC`;
     const params = [id];

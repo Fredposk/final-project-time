@@ -6,6 +6,7 @@ import Thres from './Thres';
 import Comms from './Comms';
 import { useState } from 'react';
 import BluedotLogo from './BluedotLogo';
+import Recent from './Recent';
 
 const Dots = (props) => {
     const pathVariants = {
@@ -78,9 +79,17 @@ const Dots = (props) => {
                 >
                     Comments
                 </button>
+                <button
+                    onClick={() => setPage('recent')}
+                    className='blkBtnColorHover'
+                >
+                    Recent
+                </button>
             </div>
             <div className='h-full text-center '>
-                {page === 'threads' ? <Thres props={props.match} /> : <Comms />}
+                {page === 'threads' ? <Thres props={props.match} /> : ''}
+                {page === 'comms' ? <Comms /> : ''}
+                {page === 'recent' ? <Recent /> : ''}
             </div>
 
             <Footer />

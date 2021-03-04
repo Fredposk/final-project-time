@@ -88,7 +88,7 @@ app.post(
         let commentColor;
         if (!req.session.userID) {
             req.session.userID = cryptoRandomString({
-                length: 11,
+                length: 7,
                 type: 'distinguishable',
             });
             author_id = req.session.userID;
@@ -136,7 +136,7 @@ app.post('/api/comments/add/', async (req, res) => {
     let commentColor;
     if (!req.session.userID) {
         req.session.userID = cryptoRandomString({
-            length: 11,
+            length: 7,
             type: 'distinguishable',
         });
         author_id = req.session.userID;
@@ -187,8 +187,6 @@ app.post('/api/delete/post', async (req, res) => {
 });
 
 app.get('/api/user/threads', async (req, res) => {
-    console.log(req.session.userID);
-
     try {
         const response = await db.getUserThreads(req.session.userID);
         res.status(200).json({ response: response.rows });
@@ -197,6 +195,16 @@ app.get('/api/user/threads', async (req, res) => {
         res.status(201).json({ error: error });
     }
 });
+app.get('/api/all/threads', async (req, res) => {
+    try {
+        const response = await db.getRecentThreads();
+        res.status(200).json({ response: response.rows });
+    } catch (error) {
+        console.log('error getting user threads', error);
+        res.status(201).json({ error: error });
+    }
+});
+
 app.get('/api/user/comments', async (req, res) => {
     console.log(req.session.userID);
     try {

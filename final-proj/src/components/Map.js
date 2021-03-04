@@ -91,13 +91,13 @@ function Map(props) {
     }, []);
     const panTo = useCallback(({ lat, lng }) => {
         mapRef.current.panTo({ lat, lng });
-        mapRef.current.setZoom(16);
+        mapRef.current.setZoom(18);
     }, []);
 
     const onMapClick = useCallback(
         (e) => {
             confirmAlert({
-                title: 'Ready to open a new board?',
+                title: 'Leave a dot here?',
                 // message: 'Are you sure to do this.',
                 buttons: [
                     {
@@ -165,7 +165,7 @@ function Map(props) {
                 <GoogleMap
                     mapContainerStyle={mapContainerStyle}
                     mapContainerClassName='relative'
-                    zoom={15}
+                    zoom={18}
                     center={center}
                     options={options}
                     onClick={onMapClick}
@@ -178,7 +178,7 @@ function Map(props) {
                                 position={{ lat: marker.lat, lng: marker.lng }}
                                 icon={{
                                     url:
-                                        'https://www.svgrepo.com/show/26701/flash-lightning.svg',
+                                        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/ScrewAttack_blue_bolt.png/1198px-ScrewAttack_blue_bolt.png',
                                     scaledSize: new window.google.maps.Size(
                                         30,
                                         30

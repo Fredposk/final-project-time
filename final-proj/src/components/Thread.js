@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { useQuery, useMutation } from 'react-query';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Footer from './Footer';
@@ -36,6 +36,7 @@ const Thread = (props) => {
     ///////////
     const [writeComment, setWriteComment] = useState('');
     const [uploadOpen, setUploadOpen] = useState(false);
+    const [spinner, setSpinner] = useState(false);
 
     const upload = () => {
         mutation.mutate({
@@ -44,14 +45,20 @@ const Thread = (props) => {
         });
     };
 
-    // console.log(props?.match?.params?.id);
-
     const { data, status } = useQuery('comments', () =>
         axios.get(`/api/comments/${props?.match?.params?.id}`)
     );
     // console.log(data);
     // console.log(status);
-    let room_id = data?.data?.response[0]?.room_id;
+    let room_id = data?.data?.response?.[0]?.room_id;
+
+    // const mutation = async (thread) => {
+    //     setSpinner(true);
+    //     await axios.post('/api/comments/add/', thread);
+    //     uploadOpen(false);
+    //     setSpinner(false);
+    // };
+    // const queryClient = useQueryClient();
 
     const mutation = useMutation((thread) => {
         axios.post('/api/comments/add/', thread);
@@ -114,7 +121,7 @@ const Thread = (props) => {
                             <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
                                 <img
                                     className='relative object-cover h-32 rounded-lg shadow-xl w-18'
-                                    src='https://picsum.photos/seed/picsum/200/300'
+                                    src={`${thread.thread_foto}`}
                                     alt={`${thread.topic}`}
                                 />
                                 <Delete
@@ -175,6 +182,15 @@ const Thread = (props) => {
                                 >
                                     submit
                                 </button>
+                                {spinner && (
+                                    <svg
+                                        className='w-4 h-4 ml-2 fill-current animate-spin'
+                                        xmlns='http://www.w3.org/2000/svg'
+                                        viewBox='0 0 20 20'
+                                    >
+                                        <path d='M10 3v2a5 5 0 0 0-3.54 8.54l-1.41 1.41A7 7 0 0 1 10 3zm4.95 2.05A7 7 0 0 1 10 17v-2a5 5 0 0 0 3.54-8.54l1.41-1.41zM10 20l-4-4 4-4v8zm0-12V0l4 4-4 4z' />
+                                    </svg>
+                                )}
                                 {mutation.isLoading && (
                                     <svg
                                         className='w-4 h-4 ml-2 fill-current animate-spin'
@@ -199,7 +215,7 @@ const Thread = (props) => {
                                 style={{ backgroundColor: `${thread.color}` }}
                             >
                                 <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
-                                    <div className='text-gray-500'>
+                                    <div className='mr-3 text-gray-500'>
                                         <Delete
                                             id={thread.author_id}
                                             post={thread.comment_id}

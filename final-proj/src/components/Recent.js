@@ -5,9 +5,9 @@ import { useQuery } from 'react-query';
 import { formatDistanceToNow } from 'date-fns';
 import axios from 'axios';
 
-const Thres = (props) => {
-    const { data, status } = useQuery('threads', () =>
-        axios.get(`/api/user/threads`)
+const Recent = (props) => {
+    const { data, status } = useQuery('thread', () =>
+        axios.get(`/api/all/threads`)
     );
     console.log(props);
     // console.log(data);
@@ -20,6 +20,7 @@ const Thres = (props) => {
             transition: { type: 'spring', duration: 0.4 },
         },
     };
+
     return (
         <motion.div
             className='inline-flex flex-col justify-center'
@@ -87,4 +88,4 @@ const Thres = (props) => {
     );
 };
 
-export default Thres;
+export default Recent;

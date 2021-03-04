@@ -31,7 +31,7 @@ const Comms = () => {
                             style={{ backgroundColor: `${thread.color}` }}
                         >
                             <div className='flex justify-between p-2 bg-gray-900 rounded-lg'>
-                                <div className='text-gray-500'>
+                                <div className='mr-2 text-gray-500'>
                                     <Delete
                                         id={thread.author_id}
                                         post={thread.comment_id}
